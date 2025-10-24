@@ -16,9 +16,7 @@
       }
     },
     "iconBrandColor": "#662d8e",
-    "capabilities": [
-      "actions"
-    ],
+    "capabilities": [],
     "publisher": "Alessandro Drago"
   }
 }
