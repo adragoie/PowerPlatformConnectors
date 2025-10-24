@@ -1,8 +1,0 @@
-{
-  "connectorId": "shared_ie-5fmitto-20-2d-20sms-20and-20bulk-20sms-5ffebec3b807865c9f",
-  "environment": "4bd937d8-92d0-e636-a29d-056e153f3f57",
-  "apiProperties": "apiProperties.json",
-  "apiDefinition": "apiDefinition.swagger.json",
-  "powerAppsUrl": "https://api.powerapps.com",
-  "powerAppsApiVersion": "2016-11-01"
-}
