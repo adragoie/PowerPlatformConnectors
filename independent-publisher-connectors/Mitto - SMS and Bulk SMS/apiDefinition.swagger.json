@@ -20,7 +20,6 @@
     "application/json"
   ],
   "paths": {
-    "/sms/converted": {},
     "/sms": {
       "post": {
         "summary": "Send a single SMS",
