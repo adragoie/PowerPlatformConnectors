@@ -1,0 +1,509 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "SMS and Bulk SMS APIs New",
+    "description": "The Mitto SMS and Bulk SMS connector allows integration of Mitto's services into workflows to:\n- Send individual or bulk SMS messages securely.\n- Customize text encoding (GSM, Unicode, etc.).\n- Receive status notifications via callback.",
+    "contact": {
+      "name": "Alessandro Drago",
+      "email": "alessandro.drago@impresoftengage.com",
+      "url": "https://www.impresoftengage.com/"
+    }
+  },
+  "host": "rest.mittoapi.net",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/sms": {
+      "post": {
+        "summary": "Send a single SMS",
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Send an SMS for marketing or a one-time password. Support for test messages, long messages, A/B testing with reference tags, and different languages.",
+        "operationId": "SendAnSms",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "application/json",
+            "description": "Content-Type",
+            "x-ms-visibility": "internal"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "application/json; charset=utf-8",
+            "description": "Accept",
+            "x-ms-visibility": "internal"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "from": {
+                  "type": "string",
+                  "description": "The sender of the SMS",
+                  "title": "Sender",
+                  "default": "SMS"
+                },
+                "to": {
+                  "type": "string",
+                  "description": "The receiver to send the SMS to (E.164 format)",
+                  "title": "Receiver"
+                },
+                "text": {
+                  "type": "string",
+                  "description": "The text of the SMS",
+                  "title": "Text"
+                },
+                "test": {
+                  "type": "boolean",
+                  "description": "",
+                  "title": "Is Test SMS",
+                  "x-ms-visibility": "advanced",
+                  "enum": [
+                    true,
+                    false
+                  ],
+                  "default": false
+                },
+                "type": {
+                  "type": "string",
+                  "description": "",
+                  "title": "Text Type",
+                  "default": "auto",
+                  "x-ms-visibility": "internal"
+                },
+                "reference": {
+                  "type": "string",
+                  "description": "The label for tagging the message",
+                  "title": "Customer reference",
+                  "x-ms-visibility": "internal",
+                  "default": "DynamicsIEngage"
+                },
+                "udh": {
+                  "type": "string",
+                  "description": "The custom hex-encoded",
+                  "title": "User data header",
+                  "x-ms-visibility": "advanced"
+                },
+                "validity": {
+                  "type": "integer",
+                  "description": "Default is 2880 minutes (48 hours)",
+                  "title": "Validity in minutes",
+                  "x-ms-visibility": "advanced",
+                  "format": "int32"
+                },
+                "pid": {
+                  "type": "integer",
+                  "description": "Default is 0",
+                  "title": "Protocol identifier",
+                  "format": "int32",
+                  "x-ms-visibility": "advanced"
+                },
+                "flash": {
+                  "type": "boolean",
+                  "description": "flash",
+                  "title": "Is Flash SMS",
+                  "enum": [
+                    true,
+                    false
+                  ],
+                  "x-ms-visibility": "advanced",
+                  "default": false
+                },
+                "callback": {
+                  "type": "string",
+                  "description": "http://comp.callback.url.com?ID=~msgid~&STATUS=~status~",
+                  "title": "Callback URL",
+                  "x-ms-visibility": "advanced"
+                }
+              },
+              "default": {
+                "from": "<string>",
+                "to": "<string>",
+                "text": "<string>",
+                "test": "<boolean>",
+                "type": "<string>",
+                "reference": "<string>",
+                "udh": "<string>",
+                "validity": "<integer>",
+                "pid": "<integer>",
+                "flash": "<boolean>",
+                "callback": "<string>"
+              },
+              "required": [
+                "text",
+                "to",
+                "from",
+                "type",
+                "reference"
+              ]
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "id"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "description": "timestamp"
+                },
+                "responseCode": {
+                  "type": "integer",
+                  "description": "responseCode"
+                },
+                "textLength": {
+                  "type": "integer",
+                  "description": "textLength"
+                },
+                "responseText": {
+                  "type": "string",
+                  "description": "responseText"
+                },
+                "test": {
+                  "type": "boolean",
+                  "description": "test"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/smsbulk": {
+      "post": {
+        "summary": "Send an SMS to several receivers",
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Send multiple messages with a single API call. (If you include the same phone number in the list more than once, the number will receive a text message for each instance in your list.) The response you receive for your request will show a different id for each phone number you included with your request.",
+        "operationId": "SendSmsInBulk",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "application/json",
+            "description": "Content-Type",
+            "x-ms-visibility": "internal"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "application/json; charset=utf-8",
+            "description": "Accept",
+            "x-ms-visibility": "internal"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "from": {
+                  "type": "string",
+                  "description": "The sender of the SMS",
+                  "title": "Sender",
+                  "default": "SMS"
+                },
+                "to": {
+                  "type": "string",
+                  "description": "The list of receiver to send the SMS to separated by commas (E.164 format)",
+                  "title": "Receiver"
+                },
+                "text": {
+                  "type": "string",
+                  "description": "The text of the SMS",
+                  "title": "Text"
+                },
+                "test": {
+                  "type": "boolean",
+                  "description": "",
+                  "title": "Is Test SMS",
+                  "x-ms-visibility": "advanced",
+                  "enum": [
+                    true,
+                    false
+                  ],
+                  "default": false
+                },
+                "type": {
+                  "type": "string",
+                  "description": "",
+                  "title": "TextType",
+                  "default": "auto",
+                  "x-ms-visibility": "internal"
+                },
+                "reference": {
+                  "type": "string",
+                  "description": "The label for tagging the message",
+                  "title": "Customer reference",
+                  "x-ms-visibility": "internal",
+                  "default": "DynamicsIEngage"
+                },
+                "udh": {
+                  "type": "string",
+                  "description": "The custom hex-encoded",
+                  "title": "User data header",
+                  "x-ms-visibility": "advanced"
+                },
+                "validity": {
+                  "type": "integer",
+                  "description": "Default is 2880 minutes (48 hours)",
+                  "title": "Validity in minutes",
+                  "format": "int32",
+                  "x-ms-visibility": "advanced"
+                },
+                "pid": {
+                  "type": "integer",
+                  "description": "Default is 0",
+                  "title": "Protocol identifier",
+                  "x-ms-visibility": "advanced"
+                },
+                "flash": {
+                  "type": "boolean",
+                  "description": "",
+                  "title": "Is Flash SMS",
+                  "x-ms-visibility": "advanced",
+                  "enum": [
+                    true,
+                    false
+                  ],
+                  "default": false
+                },
+                "callback": {
+                  "type": "string",
+                  "description": "http://comp.callback.url.com?ID=~msgid~&STATUS=~status~",
+                  "title": "Callback URL",
+                  "x-ms-visibility": "advanced"
+                }
+              },
+              "default": {
+                "from": "<string>",
+                "to": "<string>",
+                "text": "<string>",
+                "test": "<boolean>",
+                "type": "<string>",
+                "reference": "<string>",
+                "udh": "<string>",
+                "validity": "<integer>",
+                "pid": "<integer>",
+                "flash": "<boolean>",
+                "callback": "<string>"
+              },
+              "required": [
+                "text",
+                "to",
+                "from",
+                "type",
+                "reference"
+              ]
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "responseCode": {
+                  "type": "integer",
+                  "description": "responseCode"
+                },
+                "responseText": {
+                  "type": "string",
+                  "description": "responseText"
+                },
+                "messages": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "id"
+                      },
+                      "to": {
+                        "type": "string",
+                        "description": "to"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "timestamp"
+                      }
+                    }
+                  },
+                  "description": "messages"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usage/bycountry": {
+      "post": {
+        "summary": "Usage by Country",
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Find out how much you are using the API per country.",
+        "operationId": "UsageByCountry",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "application/json",
+            "description": "Content-Type",
+            "x-ms-visibility": "internal"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "application/json; charset=utf-8",
+            "description": "Accept",
+            "x-ms-visibility": "internal"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "startDate": {
+                  "type": "string",
+                  "description": "The date you want to start retrieving usage information (format YYYY-MM-DD)",
+                  "title": "Start Date"
+                },
+                "endDate": {
+                  "type": "string",
+                  "description": "The date you want to stop retrieving usage information (use format YYYY-MM-DD)",
+                  "title": "End Date"
+                },
+                "accountName": {
+                  "type": "string",
+                  "description": "The account name tied to your API key",
+                  "title": "Account Name"
+                }
+              },
+              "default": {
+                "startDate": "<string>",
+                "endDate": "<string>",
+                "accountName": "<string>"
+              },
+              "required": [
+                "accountName",
+                "endDate",
+                "startDate"
+              ]
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "error",
+                  "title": "error"
+                },
+                "usagesByCountry": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "country": {
+                        "type": "string",
+                        "description": "country"
+                      },
+                      "messageCount": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "messageCount"
+                      },
+                      "cost": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "cost"
+                      }
+                    }
+                  },
+                  "description": "usagesByCountry"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {},
+  "parameters": {},
+  "responses": {},
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-Mitto-API-Key"
+    }
+  },
+  "security": [
+    {
+      "api_key": []
+    }
+  ],
+  "tags": [],
+  "x-ms-connector-metadata": [
+    {
+      "propertyName": "brandColor",
+      "propertyValue": "#0078D7"
+    },
+    {
+      "propertyName": "Website",
+      "propertyValue": "https://mitto.ch"
+    },
+    {
+      "propertyName": "Privacy policy",
+      "propertyValue": "https://mitto.ch/privacy-policy"
+    },
+    {
+      "propertyName": "Categories",
+      "propertyValue": "Communication"
+    }
+  ]
+}
